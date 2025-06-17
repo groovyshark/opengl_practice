@@ -13,6 +13,7 @@ struct GLFWWindowDeleter {
 
 class Shader;
 class Triangle;
+class Rectangle;
 
 class Application {
 public:
@@ -31,4 +32,5 @@ private:
     std::unique_ptr<GLFWwindow, GLFWWindowDeleter> _window;
     std::unique_ptr<Shader> _shader;
     std::unique_ptr<Triangle> _triangle;
+    std::unique_ptr<Rectangle> _rect;
 };

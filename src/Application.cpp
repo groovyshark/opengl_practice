@@ -1,9 +1,11 @@
 #include "Application.hpp"
 
 #include <iostream>
+#include <cmath>
 
 #include "Shader.hpp"
 #include "Triangle.hpp"
+#include "Rectangle.hpp"
 
 Application::Application(int width, int height, const std::string& title)
     : _window(nullptr), 
@@ -16,6 +18,7 @@ Application::Application(int width, int height, const std::string& title)
     // создаём шейдер и треугольник
     _shader = std::make_unique<Shader>("../shaders/vertex.glsl", "../shaders/fragment.glsl");
     _triangle = std::make_unique<Triangle>();
+    _rect = std::make_unique<Rectangle>();
 }
 
 Application::~Application() {
@@ -65,8 +68,24 @@ void Application::run() {
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        float time = glfwGetTime();
         _shader->use();
-        _triangle->draw();
+
+        _shader->setFloat("time", time);
+
+        float angle = time; // вращаем по времени
+        float cosA = std::cos(angle);
+        float sinA = std::sin(angle);
+
+        float transform[] = {
+            cosA,  sinA, 0.0f, 0.0f,
+            -sinA,  cosA, 0.0f, 0.0f,
+            0.0f,  0.0f, 1.0f, 0.0f,
+            0.0f,  0.0f, 0.0f, 1.0f
+        };
+        _shader->setMat4("transform", transform);
+
+        _rect->draw();
 
         glfwSwapBuffers(_window.get());
         glfwPollEvents();

@@ -1,6 +1,12 @@
 #version 330 core
+
+in vec3 ourColor;
+
 out vec4 FragColor;
 
+uniform float time;
+
 void main() {
-    FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+    float pulse = abs(sin(time));
+    FragColor = vec4(ourColor * pulse, 1.0);
 }
